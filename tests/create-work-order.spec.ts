@@ -48,10 +48,11 @@ test('Verify successful work order creation', async ({ page }) => {
     await page.waitForTimeout(1000);
   });
 
-  // Fill in Work Order Number (optional)
+  // Fill in Work Order Number (optional) - use timestamp to ensure uniqueness
   await test.step('Fill Work Order Number', async () => {
+    const uniqueId = `AUTO-${Date.now()}`;
     await page.getByRole('textbox', { name: 'Work Order Number' }).click();
-    await page.getByRole('textbox', { name: 'Work Order Number' }).fill('AUTO-TEST-001');
+    await page.getByRole('textbox', { name: 'Work Order Number' }).fill(uniqueId);
   });
 
   // Fill in Purchase Order Number (optional)
@@ -78,7 +79,7 @@ test('Verify successful work order creation', async ({ page }) => {
   await test.step('Set Scheduled Date', async () => {
     await page.getByRole('textbox', { name: 'Scheduled Date*' }).click();
     const today = new Date().getDate().toString();
-    await page.getByRole('gridcell', { name: today }).click();
+    await page.getByRole('gridcell', { name: today, exact: true }).click();
   });
 
   // Select Priority (required)
